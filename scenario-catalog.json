@@ -1,0 +1,323 @@
+{
+  "version": "1.1.0",
+  "evidence_boundary": "RF contributes a bearing only; classification, position, and uncertainty are synthetic scenario values, not field observations.",
+  "scenarios": [
+    {
+      "id": "crossing_identity_hostile",
+      "precedence": 10,
+      "match": {
+        "time": [
+          67,
+          81
+        ],
+        "classification": "hostile"
+      },
+      "title": "Crossing integrity \u00b7 hostile track",
+      "evidence_keys": [
+        "crossing_window",
+        "classification",
+        "priority",
+        "contributors"
+      ],
+      "uncertainty_keys": [
+        "synthetic_timeline",
+        "rf_bearing_only"
+      ],
+      "review_questions": {
+        "confirm_separate_tracks": "Does the fetched frame still show one hostile and one friendly track separately?"
+      },
+      "lines": [
+        "{fused_id} remains {classification} at P{priority} during the defined t=67\u201381 crossing window.",
+        "{num_sources} source systems contribute: {contributors}."
+      ],
+      "requires_previous_frame": true,
+      "slot_templates": {
+        "watch_primary": "{fused_id} remains {classification} at P{priority} during the defined t=67\u201381 crossing window.",
+        "watch_evidence": "{num_sources} source systems contribute: {contributors}.",
+        "copilot_primary": "{fused_id} remains {classification} at P{priority} during the defined t=67\u201381 crossing window.",
+        "copilot_evidence": "{num_sources} source systems contribute: {contributors}.",
+        "review_context": "Selected track {fused_id} is scoped to this approved human-review question. The Copilot does not decide it or recommend an action."
+      },
+      "model_slots": {
+        "watch": [
+          "watch_primary",
+          "watch_evidence"
+        ],
+        "copilot": [
+          "copilot_primary",
+          "copilot_evidence"
+        ],
+        "question": [
+          "review_context"
+        ]
+      }
+    },
+    {
+      "id": "crossing_identity_friendly",
+      "precedence": 11,
+      "match": {
+        "time": [
+          67,
+          81
+        ],
+        "classification": "friend"
+      },
+      "title": "Crossing integrity \u00b7 friendly track",
+      "evidence_keys": [
+        "crossing_window",
+        "classification",
+        "contributors"
+      ],
+      "uncertainty_keys": [
+        "synthetic_timeline",
+        "rf_bearing_only"
+      ],
+      "review_questions": {
+        "confirm_separate_tracks": "Does the fetched frame still show one hostile and one friendly track separately?"
+      },
+      "lines": [
+        "{fused_id} remains friendly during the defined t=67\u201381 crossing window.",
+        "{num_sources} source systems contribute: {contributors}."
+      ],
+      "requires_previous_frame": true,
+      "slot_templates": {
+        "watch_primary": "{fused_id} remains friendly during the defined t=67\u201381 crossing window.",
+        "watch_evidence": "{num_sources} source systems contribute: {contributors}.",
+        "copilot_primary": "{fused_id} remains friendly during the defined t=67\u201381 crossing window.",
+        "copilot_evidence": "{num_sources} source systems contribute: {contributors}.",
+        "review_context": "Selected track {fused_id} is scoped to this approved human-review question. The Copilot does not decide it or recommend an action."
+      },
+      "model_slots": {
+        "watch": [
+          "watch_primary",
+          "watch_evidence"
+        ],
+        "copilot": [
+          "copilot_primary",
+          "copilot_evidence"
+        ],
+        "question": [
+          "review_context"
+        ]
+      }
+    },
+    {
+      "id": "priority_hostile_track",
+      "precedence": 20,
+      "match": {
+        "classification": "hostile",
+        "priority": 1
+      },
+      "title": "Priority hostile track",
+      "evidence_keys": [
+        "classification",
+        "priority",
+        "contributors",
+        "uncertainty"
+      ],
+      "uncertainty_keys": [
+        "synthetic_timeline",
+        "rf_bearing_only",
+        "heuristic_confidence"
+      ],
+      "review_questions": {
+        "confirm_independent_contributor": "Does a non-RF contributor remain present in the next fetched frame?"
+      },
+      "lines": [
+        "{fused_id} is {classification} at P{priority} with {num_sources} contributing source systems.",
+        "Modelled horizontal uncertainty is \u00b1{sigma_m} m; confidence is a heuristic, not a calibrated probability."
+      ],
+      "slot_templates": {
+        "watch_primary": "{fused_id} is {classification} at P{priority} with {num_sources} contributing source systems.",
+        "watch_evidence": "Modelled horizontal uncertainty is \u00b1{sigma_m} m; confidence is a heuristic, not a calibrated probability.",
+        "copilot_primary": "{fused_id} is {classification} at P{priority} with {num_sources} contributing source systems.",
+        "copilot_evidence": "Modelled horizontal uncertainty is \u00b1{sigma_m} m; confidence is a heuristic, not a calibrated probability.",
+        "review_context": "Selected track {fused_id} is scoped to this approved human-review question. The Copilot does not decide it or recommend an action."
+      },
+      "model_slots": {
+        "watch": [
+          "watch_primary",
+          "watch_evidence"
+        ],
+        "copilot": [
+          "copilot_primary",
+          "copilot_evidence"
+        ],
+        "question": [
+          "review_context"
+        ]
+      }
+    },
+    {
+      "id": "limited_evidence_unknown_track",
+      "precedence": 30,
+      "match": {
+        "classification": "unknown",
+        "max_sources": 2
+      },
+      "title": "Limited-evidence unknown track",
+      "evidence_keys": [
+        "classification",
+        "contributors",
+        "uncertainty"
+      ],
+      "uncertainty_keys": [
+        "synthetic_timeline",
+        "limited_sources",
+        "heuristic_confidence"
+      ],
+      "review_questions": {
+        "confirm_independent_contributor": "Does an additional independent contributor appear in a later fetched frame?"
+      },
+      "lines": [
+        "{fused_id} remains an unknown contact with {num_sources} contributing source systems: {contributors}.",
+        "Modelled horizontal uncertainty is \u00b1{sigma_m} m; confidence is a heuristic, not a calibrated probability."
+      ],
+      "slot_templates": {
+        "watch_primary": "{fused_id} remains an unknown contact with {num_sources} contributing source systems: {contributors}.",
+        "watch_evidence": "Modelled horizontal uncertainty is \u00b1{sigma_m} m; confidence is a heuristic, not a calibrated probability.",
+        "copilot_primary": "{fused_id} remains an unknown contact with {num_sources} contributing source systems: {contributors}.",
+        "copilot_evidence": "Modelled horizontal uncertainty is \u00b1{sigma_m} m; confidence is a heuristic, not a calibrated probability.",
+        "review_context": "Selected track {fused_id} is scoped to this approved human-review question. The Copilot does not decide it or recommend an action."
+      },
+      "model_slots": {
+        "watch": [
+          "watch_primary",
+          "watch_evidence"
+        ],
+        "copilot": [
+          "copilot_primary",
+          "copilot_evidence"
+        ],
+        "question": [
+          "review_context"
+        ]
+      }
+    },
+    {
+      "id": "supported_friendly_track",
+      "precedence": 40,
+      "match": {
+        "classification": "friend"
+      },
+      "title": "Supported friendly track",
+      "evidence_keys": [
+        "classification",
+        "contributors",
+        "uncertainty"
+      ],
+      "uncertainty_keys": [
+        "synthetic_timeline",
+        "rf_bearing_only"
+      ],
+      "review_questions": {
+        "confirm_track_continuity": "Does the next fetched frame retain this friendly track separately?"
+      },
+      "lines": [
+        "{fused_id} is classified friendly with {num_sources} contributing source systems.",
+        "Modelled horizontal uncertainty is \u00b1{sigma_m} m; RF remains bearing-only evidence."
+      ],
+      "slot_templates": {
+        "watch_primary": "{fused_id} is classified friendly with {num_sources} contributing source systems.",
+        "watch_evidence": "Modelled horizontal uncertainty is \u00b1{sigma_m} m; RF remains bearing-only evidence.",
+        "copilot_primary": "{fused_id} is classified friendly with {num_sources} contributing source systems.",
+        "copilot_evidence": "Modelled horizontal uncertainty is \u00b1{sigma_m} m; RF remains bearing-only evidence.",
+        "review_context": "Selected track {fused_id} is scoped to this approved human-review question. The Copilot does not decide it or recommend an action."
+      },
+      "model_slots": {
+        "watch": [
+          "watch_primary",
+          "watch_evidence"
+        ],
+        "copilot": [
+          "copilot_primary",
+          "copilot_evidence"
+        ],
+        "question": [
+          "review_context"
+        ]
+      }
+    },
+    {
+      "id": "track_absent",
+      "precedence": 90,
+      "match": {
+        "track_absent": true
+      },
+      "title": "Selected track unavailable",
+      "evidence_keys": [
+        "frame_availability"
+      ],
+      "uncertainty_keys": [
+        "synthetic_timeline"
+      ],
+      "review_questions": {
+        "select_available_track": "Which fused track is present in this fetched frame?"
+      },
+      "lines": [
+        "The selected track is not present in the fetched scenario frame."
+      ],
+      "slot_templates": {
+        "watch_primary": "The selected track is not present in the fetched scenario frame.",
+        "watch_evidence": "The selected track is not present in the fetched scenario frame.",
+        "copilot_primary": "The selected track is not present in the fetched scenario frame.",
+        "copilot_evidence": "The selected track is not present in the fetched scenario frame.",
+        "review_context": "Selected track {fused_id} is scoped to this approved human-review question. The Copilot does not decide it or recommend an action."
+      },
+      "model_slots": {
+        "watch": [
+          "watch_primary",
+          "watch_evidence"
+        ],
+        "copilot": [
+          "copilot_primary",
+          "copilot_evidence"
+        ],
+        "question": [
+          "review_context"
+        ]
+      }
+    },
+    {
+      "id": "frame_unavailable",
+      "precedence": 100,
+      "match": {
+        "frame_unavailable": true
+      },
+      "title": "Scenario frame unavailable",
+      "evidence_keys": [
+        "frame_availability"
+      ],
+      "uncertainty_keys": [
+        "synthetic_timeline"
+      ],
+      "review_questions": {
+        "retry_frame": "Can the requested scenario frame be fetched before it is reviewed?"
+      },
+      "lines": [
+        "No fetched scenario frame is available for the requested timeline position."
+      ],
+      "slot_templates": {
+        "watch_primary": "No fetched scenario frame is available for the requested timeline position.",
+        "watch_evidence": "No fetched scenario frame is available for the requested timeline position.",
+        "copilot_primary": "No fetched scenario frame is available for the requested timeline position.",
+        "copilot_evidence": "No fetched scenario frame is available for the requested timeline position.",
+        "review_context": "Selected track {fused_id} is scoped to this approved human-review question. The Copilot does not decide it or recommend an action."
+      },
+      "model_slots": {
+        "watch": [
+          "watch_primary",
+          "watch_evidence"
+        ],
+        "copilot": [
+          "copilot_primary",
+          "copilot_evidence"
+        ],
+        "question": [
+          "review_context"
+        ]
+      }
+    }
+  ],
+  "explanation_contract_version": "1.0.0"
+}

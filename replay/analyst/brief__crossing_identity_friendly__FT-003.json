@@ -1,0 +1,53 @@
+{
+  "catalog_version": "1.1.0",
+  "evidence_boundary": "RF contributes a bearing only; classification, position, and uncertainty are synthetic scenario values, not field observations.",
+  "explanation_contract_version": "1.0.0",
+  "model": "qwen3:4b",
+  "provenance": "PROVEN (SCENARIO) \u00b7 synthetic timeline",
+  "questions": [
+    {
+      "id": "confirm_separate_tracks",
+      "text": "Does the fetched frame still show one hostile and one friendly track separately?"
+    }
+  ],
+  "recorded_at": "2026-10-27",
+  "recorded_from_t": 67,
+  "response": {
+    "copilot_slot_ids": [
+      "copilot_primary",
+      "copilot_evidence"
+    ],
+    "evidence_keys": [
+      "crossing_window",
+      "classification",
+      "contributors"
+    ],
+    "explanation_contract_version": "1.0.0",
+    "question_slot_ids": [
+      "review_context"
+    ],
+    "review_question_id": "confirm_separate_tracks",
+    "scenario_id": "crossing_identity_friendly",
+    "selected_track_id": "FT-003",
+    "uncertainty_keys": [
+      "synthetic_timeline",
+      "rf_bearing_only"
+    ],
+    "watch_slot_ids": [
+      "watch_primary",
+      "watch_evidence"
+    ]
+  },
+  "scenario_id": "crossing_identity_friendly",
+  "selected_track_id": "FT-003",
+  "source_status": "validated_local_model_slots",
+  "summary": [
+    "FT-003 remains friendly during the defined t=67\u201381 crossing window.",
+    "4 source systems contribute: C2 network, Precision tracker, Plot radar, RF direction finding."
+  ],
+  "title": "Crossing integrity \u00b7 friendly track",
+  "watch": [
+    "FT-003 remains friendly during the defined t=67\u201381 crossing window.",
+    "4 source systems contribute: C2 network, Precision tracker, Plot radar, RF direction finding."
+  ]
+}

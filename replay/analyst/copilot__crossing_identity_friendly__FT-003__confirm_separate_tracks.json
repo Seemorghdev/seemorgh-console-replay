@@ -1,0 +1,25 @@
+{
+  "answer": {
+    "question_id": "confirm_separate_tracks",
+    "text": "For selected track FT-003 in crossing integrity \u00b7 friendly track, this is an approved human-review question for the fetched synthetic frame: Does the fetched frame still show one hostile and one friendly track separately? The Copilot does not decide it or recommend an action."
+  },
+  "catalog_version": "1.1.0",
+  "evidence_boundary": "RF contributes a bearing only; classification, position, and uncertainty are synthetic scenario values, not field observations.",
+  "provenance": "PROVEN (SCENARIO) \u00b7 synthetic timeline",
+  "questions": [
+    {
+      "id": "confirm_separate_tracks",
+      "text": "Does the fetched frame still show one hostile and one friendly track separately?"
+    }
+  ],
+  "recorded_at": "2026-10-27",
+  "recorded_from_t": 67,
+  "scenario_id": "crossing_identity_friendly",
+  "selected_track_id": "FT-003",
+  "source_status": "deterministic_scenario_copilot",
+  "summary": [
+    "FT-003 remains friendly during the defined t=67\u201381 crossing window.",
+    "4 source systems contribute: C2 network, Precision tracker, Plot radar, RF direction finding."
+  ],
+  "title": "Crossing integrity \u00b7 friendly track"
+}

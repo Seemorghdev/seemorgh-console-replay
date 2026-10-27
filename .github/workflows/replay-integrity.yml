@@ -1,0 +1,43 @@
+name: replay-integrity
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Every replay file matches SHA256SUMS
+        run: sha256sum -c SHA256SUMS
+      - name: SHA256SUMS lists every replay file, and nothing else
+        run: |
+          diff <(find replay -type f | sort) <(awk '{print $2}' SHA256SUMS | sort)
+      - name: All 91 frames and briefs are present
+        run: |
+          for t in $(seq 0 90); do test -s replay/frame-$t.json && test -s replay/brief-$t.json || { echo "missing t=$t"; exit 1; }; done
+      - name: Both pages run in replay mode
+        run: |
+          grep -q '<html lang="en" data-mode="replay">' index.html
+          grep -q '<html lang="en" data-mode="replay">' behind-the-system.html
+      - name: Recorded answers are labelled and indexed
+        run: |
+          grep -q 'RECORDED LOCAL MODEL DRAFT' app.js
+          python3 - <<'PY'
+          import json, os, re
+          index = json.load(open("replay/analyst/index.json"))
+          names = {n for kind in index.values() for n in kind.values()}
+          for n in names:
+              assert re.fullmatch(r"[A-Za-z0-9_.-]+\.json", n), n
+              rec = json.load(open(os.path.join("replay/analyst", n)))
+              assert rec.get("recorded_at") == "2026-10-27", n
+          print(len(names), "recorded answers indexed")
+          PY
+      - name: No local paths in published files
+        run: |
+          ! grep -rnE '/Users/|/tmp/|/private/|file://' --include='*.json' --include='*.html' --include='*.md' .

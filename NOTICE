@@ -1,0 +1,16 @@
+Seemorgh operator console: recorded replay
+Copyright 2026 Seemorghdev
+
+This product includes the front end of the Seemorgh operator console (index.html, app.js,
+behind-the-system.html, behind.js, scenario-catalog.json), licensed under the Apache License 2.0.
+
+The replay data under replay/ was exported on 27 October 2026 from the private seemorgh-stack
+repository at commit 793a475dc2476fcaf247c619f8eecff372b223eb:
+- The fused frames derive from the scenario generator provided for the TYTAN counter-UAS
+  multi-sensor fusion challenge and are published with permission.
+- The recorded answers under replay/analyst/ were produced locally by qwen3:4b (Ollama 0.40.11,
+  digest 359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7). The model weights are
+  not included and carry their own licence.
+
+The page loads Leaflet 1.9.4 (BSD-2-Clause) from unpkg and map tiles from OpenStreetMap
+(© OpenStreetMap contributors, ODbL).

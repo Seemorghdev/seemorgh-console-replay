@@ -1,0 +1,157 @@
+[
+  {
+    "kind": "brief",
+    "key": [
+      "priority_hostile_track",
+      "FT-001"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "priority_hostile_track",
+      "FT-001"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "priority_hostile_track",
+      "FT-001",
+      "confirm_independent_contributor"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "brief",
+    "key": [
+      "limited_evidence_unknown_track",
+      "FT-002"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "limited_evidence_unknown_track",
+      "FT-002"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "limited_evidence_unknown_track",
+      "FT-002",
+      "confirm_independent_contributor"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "brief",
+    "key": [
+      "supported_friendly_track",
+      "FT-003"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "supported_friendly_track",
+      "FT-003"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "supported_friendly_track",
+      "FT-003",
+      "confirm_track_continuity"
+    ],
+    "first_t": 0,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "brief",
+    "key": [
+      "crossing_identity_hostile",
+      "FT-001"
+    ],
+    "first_t": 67,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "crossing_identity_hostile",
+      "FT-001"
+    ],
+    "first_t": 67,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "crossing_identity_hostile",
+      "FT-001",
+      "confirm_separate_tracks"
+    ],
+    "first_t": 67,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "brief",
+    "key": [
+      "crossing_identity_friendly",
+      "FT-003"
+    ],
+    "first_t": 67,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "crossing_identity_friendly",
+      "FT-003"
+    ],
+    "first_t": 67,
+    "source_status": "validated_local_model_slots",
+    "recorded": true
+  },
+  {
+    "kind": "copilot",
+    "key": [
+      "crossing_identity_friendly",
+      "FT-003",
+      "confirm_separate_tracks"
+    ],
+    "first_t": 67,
+    "source_status": "deterministic_scenario_copilot",
+    "recorded": true
+  }
+]
