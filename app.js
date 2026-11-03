@@ -195,7 +195,7 @@ function ensureMap(gcs) {
 }
 
 // ---- map renderer (adapted from the approved renderer to production FusionFrame payloads) ----
-// Plots: GCS, fused tracks (σ + priority), raw per-source reports, RF bearing-only rays, rejected/
+// Plots: GCS, fused tracks (σ + priority), raw per-source reports, RF bearing + coarse-range rays, rejected/
 // known clutter ONLY when the payload labels it, velocity, and real fetched-frame history trails.
 // Deterministic label placement; selected marker synced with the contact list. Field drone is never
 // plotted here (this consumes FusionFrame/TYTAN only — field evidence lives on its own page).
@@ -317,7 +317,7 @@ function renderMap(svg, frame, show) {
       s += `<g stroke="var(--faint)" stroke-width="1"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none"/><line x1="${cx-r}" y1="${cy-r}" x2="${cx+r}" y2="${cy+r}"/><line x1="${cx-r}" y1="${cy+r}" x2="${cx+r}" y2="${cy-r}"/></g>`;
     }
   }
-  // RF remains bearing-only: rays appear only when this explicit layer is enabled.
+  // RF rays appear only when this explicit layer is enabled; the source contributes bearing and coarse range.
   if (showRays) {
     for (const r of rayEnds) {
       if (sensorFocus && r.src !== sensorFocus) continue;
@@ -384,10 +384,10 @@ function placeLabels(labels) {
 function renderLegend() {
   const items = [
     ["GCS / precision","var(--gcs)"], ["Long-range radar","var(--s1)"], ["Plot radar","var(--s3)"],
-    ["C2 network (logical)","var(--s4)"], ["RF bearing-only","var(--s5)"],
+    ["C2 network (logical)","var(--s4)"], ["RF bearing + coarse range","var(--s5)"],
   ];
   return items.map(([l,c]) => `<span class="lg"><span style="width:8px;height:8px;border-radius:50%;background:${c};display:inline-block"></span>${esc(l)}</span>`).join("")
-    + `<span class="lg" style="color:var(--faint)">green halo = selected-track contributor · RF = bearing-only · history = fetched frames only</span>`;
+    + `<span class="lg" style="color:var(--faint)">green halo = selected-track contributor · RF = bearing + coarse range · history = fetched frames only</span>`;
 }
 
 // ---- reasoning assistance (right panel; preserved live-badge truth logic) ----
@@ -416,9 +416,10 @@ async function reasoningHTML() {
   const topHtml = top ? `<p class="obs"><b>${esc(top.fused_id)}:</b> ${esc(top.rationale)}${top.uncertainty_note?` — ${esc(top.uncertainty_note)}`:""}</p>` : "";
   const missing = (b.missing_information || []).length
     ? `<p class="obs">Recommended: verify / observe — ${(b.missing_information||[]).map(esc).join("; ")}</p>` : "";
+  const evidenceBoundary = String(b.evidence_boundary).replace(/RF contributes a bearing only/g, "RF adds a bearing and a coarse range");
   return `<div class="brief"><div class="bh"><span class="ev-badge ${cls}">${esc(label)}</span> reasoning · assistance</div>
     <p>${esc(b.situation_summary)}</p>${topHtml}
-    <p class="obs">Evidence boundary: ${esc(b.evidence_boundary)}</p>${missing}
+    <p class="obs">Evidence boundary: ${esc(evidenceBoundary)}</p>${missing}
     <p class="obs muted">model: <b>${model}</b> · t=${state.t}</p>${guardrail}</div>`;
 }
 
@@ -441,7 +442,7 @@ function installationHTML() {
     ["precision_sensor", "Precision tracker", "GCS co-located", "radar"],
     ["long_range_radar", "Long-range radar", "fixed synthetic site", "radar"],
     ["raw_plots", "Plot radar", "fixed synthetic site", "radar"],
-    ["rf_sensor", "RF direction finding", "bearing-only", "rf"],
+    ["rf_sensor", "RF direction finding", "bearing + coarse range", "rf"],
     ["c2_network", "C2 network", "no physical location", "net"],
   ];
   return `<div class="install-hd"><span>Installation</span><b>${state.sensorFocus ? 'FOCUS' : 'SYNTHETIC'}</b></div>${rows.map(([source, label, detail, sym]) => {
@@ -598,7 +599,8 @@ function watchHTML(tr) {
     : `<article class="watch-entry change"><div class="watch-meta"><span>${esc(match.title)}</span><span>t=${state.t}</span></div>${lines}<span class="watch-source">${hasModelDraft ? esc(modelDraftLabel(result)) : `DETERMINISTIC SCENARIO FALLBACK · fixed catalogue v${esc(state.scenarioCatalog.version)}`}</span></article>`;
   const boundary = `<article class="watch-entry boundary"><div class="watch-meta"><span>evidence boundary</span><span>scenario</span></div><p>${esc(state.scenarioCatalog.evidence_boundary)}</p><span class="watch-source">PROVEN (SCENARIO) · synthetic timeline</span></article>`;
   const status = analystStatus(match), toggleLabel = state.watchPaused ? "Resume watch" : "Pause watch";
-  return `<details class="panel-section watch" open><summary>AI watch · scenario signals</summary><div class="section-body"><div class="watch-summary"><span class="watch-status"><i></i>${esc(status)}</span><span>${esc(match.title)}</span></div><div class="watch-feed">${current}${boundary}</div><div class="watch-foot"><span>Review question: ${esc(question)} Proactive, not autonomous; no actions or commands.</span><button id="watchToggle" type="button" aria-pressed="${state.watchPaused}">${toggleLabel}</button></div></div></details>`;
+  const briefLabel = REPLAY ? `<span class="tag">Fixed example brief (t=0)</span>` : "";
+  return `<details class="panel-section watch" open><summary>AI watch · scenario signals</summary><div class="section-body"><div class="watch-summary"><span class="watch-status"><i></i>${esc(status)}</span><span>${esc(match.title)}</span></div>${briefLabel}<div class="watch-feed">${current}${boundary}</div><div class="watch-foot"><span>Review question: ${esc(question)} Proactive, not autonomous; no actions or commands.</span><button id="watchToggle" type="button" aria-pressed="${state.watchPaused}">${toggleLabel}</button></div></div></details>`;
 }
 // ---- separate scenario Copilot ------------------------------------------------
 // This surface uses the same server-built scenario packet as AI Watch. It has no free-text
@@ -783,6 +785,8 @@ async function draw() {
   if (timelineControl) timelineControl.style.setProperty("--timeline-progress", `${(state.t / 90) * 100}%`);
   ensureMap(state.frame?.gcs);
   renderMap(document.getElementById("air"), state.frame, state.show);
+  const viewHeading = document.querySelector(".maphd h1");
+  if (viewHeading) viewHeading.textContent = state.show === "raw" ? "Sensor evidence" : state.show === "both" ? "Combined" : "Air picture";
   document.getElementById("legend").innerHTML = renderLegend();
   document.getElementById("telemetry").innerHTML = telemetryHTML();
   document.getElementById("trackStrip").innerHTML = trackStripHTML();
@@ -791,6 +795,8 @@ async function draw() {
   if (rangeLabel) rangeLabel.textContent = !state.frame?.gcs ? "Map geometry unavailable" : state.sensorFocus === "c2_network" ? "C2 logical contributor · no map geometry" : state.sensorFocus ? `SOURCE FOCUS · ${SOURCE_LABEL[state.sensorFocus] || state.sensorFocus}` : "GCS-relative geometry";
   document.querySelectorAll("#showseg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.show === state.show)));
   document.querySelectorAll("[data-layer]").forEach(b => b.setAttribute("aria-pressed", String(!!state.layers[b.dataset.layer])));
+  const rayButton = document.querySelector('[data-layer="rays"]');
+  if (rayButton) rayButton.textContent = "RF bearing + range";
   document.querySelectorAll(".bm").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.b === state.t)));
 
   document.getElementById("contacts").innerHTML = contactsHTML();
@@ -808,7 +814,9 @@ async function draw() {
 
   // frame-source honesty label
   const ff = document.getElementById("frameflag");
-  if (ff) ff.textContent = (state.frameMode === "fixture" || state.frameMode === "offline")
+  if (ff) ff.textContent = REPLAY
+    ? "recorded engine frames · all 91 frames · no interpolation"
+    : (state.frameMode === "fixture" || state.frameMode === "offline")
     ? "fixture / deterministic · 6 of 91 frames offline · no interpolation"
     : "live engine · all 91 real frames · no interpolation";
 
