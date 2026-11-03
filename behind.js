@@ -38,15 +38,16 @@ async function build(){
   const chapters = [
     { id:"problem", num:"01", title:"Original TYTAN fusion problem", html: () => `
       <p>Five vendor systems disagree on coordinate frame, units, timestamps, and even what an "id" means.
-      Some emit filtered tracks; one emits raw plots full of clutter; one is bearing-only RF. No feed is
+      Some emit filtered tracks; one emits raw plots full of clutter; one is RF direction finding with a coarse range. No feed is
       trustworthy alone. The job: fuse them into one prioritized picture, without overstating certainty.</p>
       ${chip("PROVEN (SCENARIO)","ev-proven")}` },
 
     { id:"fusion", num:"02", title:"Fusion behavior", html: () => {
       const t = (frame && frame.fused_tracks) ? frame.fused_tracks : [];
       return `<p>At every timestep the five feeds normalize, associate, de-duplicate, and prioritize into
-      fused tracks. Nearby raw markers are several vendors measuring one possible object; clutter is
-      rejected; RF stays bearing-only. Not every sensor sees every object.</p>
+      fused tracks. Nearby raw markers are several vendors measuring one possible object; reports that do
+      not fit the gates are rejected, and RF contributes a bearing plus a coarse range. Not every sensor
+      sees every object.</p>
       ${chip("PROVEN (SCENARIO)","ev-proven")}
       <div class="card"><h3>Fused tracks @ t=74 (real FusionFrame${frame?"":" — unavailable"})</h3>
       ${t.length ? t.map(x=>`<div class="metric"><span class="n">P${esc(x.priority)}</span><span class="l">${esc(x.classification)} · ${esc(x.num_sources)} systems / ${esc((x.contributors||[]).length)} reports · ±${num(x.position_sigma_m,1)} m</span></div>`).join("") : `<div class="pending">Fusion frame unavailable — degraded state, not data.</div>`}
@@ -55,14 +56,15 @@ async function build(){
     { id:"crossing", num:"03", title:"Crossing stress test", html: () => `
       <p>Between t=67 and t=81 the hostile and friendly interceptor tracks nearly cross. Fusion holds
       exactly one hostile and one friend through the crossing, and the hostile stays priority 1 — the hard
-      case where naive trackers swap identities.</p>
+      case where the two aircraft's reports must be kept apart.</p>
       ${chip("PROVEN (SCENARIO)","ev-proven")}` },
 
     { id:"field", num:"04", title:"Separately validated field sensor", html: () => {
       if (!field || !field.detection) return `<p>Field evidence unavailable.</p>${chip("PROVEN (FIELD)","ev-field")}`;
       const d = field.detection, tr = field.triangulation || {};
       return `<p>The field sensor is two cameras. Detection is validated; localization is a
-      telemetry-referenced estimate with honest, bounded uncertainty — not surveyed accuracy. This is
+      telemetry-referenced estimate with honest, bounded uncertainty — not surveyed accuracy. The
+      triangulation uses 4 reference-matched Camera-B frames, operator-cued. This is
       supporting proof that the field sensor produces an optical position estimate; it is never plotted on
       the TYTAN scenario map.</p>
       ${chip("PROVEN (FIELD)","ev-field")}
