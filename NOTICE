@@ -4,7 +4,7 @@ Copyright 2026 Seemorghdev
 This product includes the front end of the Seemorgh operator console (index.html, app.js,
 behind-the-system.html, behind.js, scenario-catalog.json), licensed under the Apache License 2.0.
 
-The replay data under replay/ was exported on 27 October 2026 from the private seemorgh-stack
+The replay data under replay/ was exported on 27 October 2026 from the console's private source
 repository at commit 793a475dc2476fcaf247c619f8eecff372b223eb:
 - The fused frames derive from the scenario generator provided for the TYTAN counter-UAS
   multi-sensor fusion challenge and are published with permission.
